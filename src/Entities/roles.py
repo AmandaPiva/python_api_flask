@@ -6,4 +6,4 @@ from src.app import db
 class Role(db.Model):
     id: Mapped[int] = mapped_column(sa.Integer, primary_key=True)
     name: Mapped[str] = mapped_column(sa.String, unique=True, nullable=False)
-    user: Mapped[list["User"]] = relationship(back_populates="parents")
+    user: Mapped[list["User"]] = relationship(back_populates="roles")

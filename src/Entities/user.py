@@ -8,4 +8,4 @@ class User(db.Model):
    username: Mapped[str] = mapped_column(sa.String, unique=True, nullable=False)
    password: Mapped[str] = mapped_column(sa.String, nullable=False)
    role_id: Mapped[int] = mapped_column(sa.ForeignKey('role.id'))
-   role: Mapped["Role"] = relationship(back_populates="user")
+   roles: Mapped["Role"] = relationship(back_populates="user")
