@@ -6,6 +6,7 @@ from src.Entities.user import User
 from src.app import db
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
+from src.utils import requires_role
 
 #definindo a url padrao
 app = Blueprint('user', __name__, url_prefix='/users')
@@ -35,12 +36,8 @@ def _list_users():
 
 @app.route('/', methods=['GET','POST'])
 @jwt_required()
+@requires_role("admin")
 def handle_user():
-    user_id = get_jwt_identity()
-    user = db.get_or_404(User, user_id)
-
-    if user.roles.name != 'admin':
-        return {"message": "User dont have access"}, HTTPStatus.FORBIDDEN
 
     if request.method == 'POST':
         _create_user() #chamamos o método que adicionará o user no banco
@@ -52,6 +49,7 @@ def handle_user():
 
 @app.route('/<int:user_id>', methods=['PATCH'])
 @jwt_required()
+@requires_role("admin")
 def update_user(user_id):
     user = db.get_or_404(User, user_id)
     data = request.json
@@ -66,6 +64,7 @@ def update_user(user_id):
 
 @app.route('/<int:user_id>', methods=['GET'])
 @jwt_required()
+@requires_role("admin")
 def get_user(user_id):
     user = db.get_or_404(User, user_id)
     return {
